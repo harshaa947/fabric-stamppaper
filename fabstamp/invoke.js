@@ -62,7 +62,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		//targets: let default to the peer assigned to the client
 		chaincodeId: 'fabstamp',
 		fcn: 'createStamp',
-		args:['stamp56', '25-04-2019', 'i am instrument hash ', '2', 'attah[0]','attach[1]','UP','2','sign 3','0','sign 4','1'],
+		args:['Stamp56', '25-04-2019', 'i am instrument hash ', '2', 'attah[0]','attach[1]','UP','2','sign 3','0','sign 4','1'],
 		chainId: 'mychannel',
 		txId: tx_id
 	};

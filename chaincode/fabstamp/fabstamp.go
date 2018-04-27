@@ -82,7 +82,11 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.initLedger(APIstub)
 	} else if function == "createStamp" {
 		return s.createStamp(APIstub, args)
-	} 
+	} else if function == "readEverything" {
+		return s.readEverything(APIstub, args)
+	}else if function == "getHistory" {
+		return s.getHistory(APIstub, args)
+		}
 	return shim.Error("Invalid Smart Contract function name.")
 }
 
@@ -165,6 +169,77 @@ func (s *SmartContract) createStamp(APIstub shim.ChaincodeStubInterface, args []
 
 	return shim.Success(nil)
 }
+
+func (s *SmartContract) readEverything(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+	
+	type Everything struct {
+		Stamps  []Stamp  `json:"stamps"`
+		Keys    []string `json:"keys"`
+	}
+	var everything Everything
+	resultsIterator, err := APIstub.GetStateByRange("Stamp0", "Stamp9999999999999999999")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	defer resultsIterator.Close()
+	for resultsIterator.HasNext() {
+		aKeyValue, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		queryKeyAsStr := aKeyValue.Key
+		queryValAsBytes := aKeyValue.Value
+		fmt.Println("on stamp id - ", queryKeyAsStr)
+		var stamp Stamp
+		json.Unmarshal(queryValAsBytes, &stamp)                  //un stringify it aka JSON.parse()
+		everything.Stamps = append(everything.Stamps, stamp)   //add this marble to the list
+		everything.Keys = append(everything.Keys, queryKeyAsStr)   //add this key to the list
+	}
+		//change to array of bytes
+	everythingAsBytes, _ := json.Marshal(everything)              //convert to array of bytes
+	return shim.Success(everythingAsBytes)		
+	
+}
+
+func (s *SmartContract) getHistory(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+	type AuditHistory struct {
+		TxId    string   `json:"txId"`
+		Value   Stamp   `json:"value"`
+	}
+	var history []AuditHistory;
+	var stamp Stamp
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+	stampId := args[0]
+	resultsIterator, err := APIstub.GetHistoryForKey(stampId)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	defer resultsIterator.Close()
+	for resultsIterator.HasNext() {
+		historyData, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		var tx AuditHistory
+		tx.TxId = historyData.TxId                     //copy transaction id over
+		json.Unmarshal(historyData.Value, &stamp)     //un stringify it aka JSON.parse()
+		if historyData.Value == nil {                  //marble has been deleted
+			var emptyStamp Stamp
+			tx.Value = emptyStamp                 //copy nil marble
+		} else {
+			json.Unmarshal(historyData.Value, &stamp) //un stringify it aka JSON.parse()
+			tx.Value = stamp                      //copy marble over
+		}
+		history = append(history, tx)              //add this tx to the list
+	}
+	//change to array of bytes
+	historyAsBytes, _ := json.Marshal(history)     //convert to array of bytes
+	return shim.Success(historyAsBytes)
+}
+
 
 
 // The main function is only relevant in unit test mode. Only included here for completeness.

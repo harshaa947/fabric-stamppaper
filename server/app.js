@@ -40,10 +40,10 @@ var cp_general = require(appRoot+'/config/general');
 
 // --- Setup Express --- //
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 app.use(compression());
 app.use(cookieParser());
-app.use(serve_static(path.join(__dirname, 'public')));
+app.use('/static',express.static(__dirname + '/public'));
 app.use(session({ secret: 'lostmymarbles', resave: true, saveUninitialized: true }));
 app.options('*', cors());
 app.use(cors());
@@ -58,7 +58,7 @@ app.use(require('./routes'));
 // ============================================================================================================================
 var port = cp_general.port;
 var host = cp_general.host;
-var server = http.createServer(app) //.listen(port, function () { });
+var server = http.createServer(app).listen(port, function () { });
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 server.timeout = 240000;
 console.log('\n');

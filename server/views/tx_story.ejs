@@ -1,0 +1,68 @@
+
+
+<div id="txStoryPanel">
+   <span class="fa fa-close closeTxStory" id="closeTxStoryPos"></span>
+   <div class="txStepWrap inactiveStep" id="txStep1">
+      <div class="txStatusWrap">
+         <div class="txStatus"></div>
+      </div>
+      <div class="txLegend">Build Proposal</div>
+      <div class="txStoryWrap">
+         <div class="marbleWrap">
+            <div class="ball hideBorders leftPos" id="proposeMarbleStable" title="Your marble tx"></div>
+            <div class="ball hideBorders leftPos" id="proposeMarble"></div>
+            <div class="ball leftPos" id="marbleBorderTop"></div>
+            <div class="ball leftPos" id="marbleBorderBottom"></div>
+            <div class="ball leftPos" id="marbleBorderLeft"></div>
+            <div class="ball leftPos" id="marbleBorderRight"></div>
+         </div>
+      </div>
+      <div class="txDescription"><span>The invocation needs to be signed and packaged as a proposal. </span><span>This is done here, in the Marbles application. </span></div>
+   </div>
+   <div class="txStepWrap inactiveStep" id="txStep2">
+      <div class="txStatusWrap">
+         <div class="txStatus"></div>
+      </div>
+      <div class="txLegend">Endorsement</div>
+      <div class="txStoryWrap">
+         <div class="marbleWrap">
+            <div class="ball" id="endorseMarbleStable" title="Your marble tx"><span class="fa fa-check"></span></div>
+            <div class="ball" id="endorseMarble"><span class="fa fa-check"></span></div>
+         </div>
+      </div>
+      <div class="txDescription"><span>Next, we send the transaction proposal to our peer for endorsement. </span><span>The peer will simulate the transaction, verify the proposal, and then sign the proposal. </span><span>It is then sent back to Marbles.</span></div>
+   </div>
+   <div class="txStepWrap inactiveStep" id="txStep3">
+      <div class="txStatusWrap">
+         <div class="txStatus"></div>
+      </div>
+      <div class="txLegend">Ordering</div>
+      <div class="txStoryWrap">
+         <div id="orderBoxStable">
+            <span class="ball ordererMarbles hideMe" title="Another marble tx"><span class="fa fa-check"></span></span><span class="ball ordererMarbles hideMe" title="Your marble tx"><span class="fa fa-check"></span></span><span class="ball ordererMarbles hideMe"
+               title="Another marble tx"><span class="fa fa-check"></span></span>
+            <div id="orderBox">Block</div>
+         </div>
+      </div>
+      <div class="txDescription"><span>Then Marbles will send our endorsed proposal to the orderer. </span><span>The orderer will sequence transactions from throughout the network including ours. </span></div>
+   </div>
+   <div class="txStepWrap inactiveStep" id="txStep4">
+      <div class="txStatusWrap">
+         <div class="txStatus"></div>
+      </div>
+      <div class="txLegend">Validate & Commit</div>
+      <div class="txStoryWrap">
+         <div id="commitBoxStable" title="Block"><span class="fa fa-search"></span></div>
+      </div>
+      <div class="txDescription"><span>The block containing our transaction is sent from the orderer to our peer. </span><span>Finally it is validated by the peer and then committed to the peer's ledger. </span></div>
+   </div>
+   <div>
+      <div class="hint">* Note the speed of this process is slowed down for demonstration purposes</div>
+   </div>
+   <div id="txStoryErrorWrap"> <span class="fa fa-warning" style="fill: #000;"></span><span id="txStoryErrorTxt">&nbsp;</span></div>
+   <div class="stepHelpWrap" id="doneTxStep">
+      <h2>Invoke Complete</h2>
+      <br/><br/><button class="closeTxStory" type="button">Close</button>
+   </div>
+</div>
+

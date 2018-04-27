@@ -4,6 +4,7 @@ var config = {
 	"peer_address":"grpc://localhost:7051",
 	"orderer_address":"grpc://localhost:7050",
 	"ca_address":'http://localhost:7054',
+	"eventhub_peer_address": 'grpc://localhost:7053',
 	"ca_domain":'ca.example.com',
 	"store_path":"hfc-key-store",
 	"channel":"mychannel",
@@ -14,6 +15,7 @@ var config = {
 	"blockDelay":1000,
 	"port" : 4000,
 	"host" : "0.0.0.0",
-	"user_role":"client"	
+	"user_role":"client",
+	"chaincodeId":"fabstamp"	
 	}
 module.exports = config;

@@ -1,0 +1,2 @@
+./deleteval.sh
+./setup.sh

@@ -1,0 +1,25 @@
+<div id="settingsPanel">
+   <span class="fa fa-close" id="closeSettings"></span>
+   <div class="settingsWrap">
+      <h3>Story Mode</h3>
+      <hr/>
+      <p>Story mode enables the step by step walk through of the invocation process.</p>
+      <p>Enable story mode if you are new to Stamp or Fabric. </p>
+      <br/><br/>
+      <p> <span>Story mode is </span><span class="storyOn" id="storyStatus">on</span></p>
+      <p><button type="button" id="disableStoryMode">Disable</button><span>&nbsp;&nbsp;</span><button type="button" disabled="disabled" id="enableStoryMode">Enable</button></p>
+   </div>
+   <div class="settingsWrap" hidden="hidden">
+      <h3> <span>Endorsements</span><span id="construction">(work in progress... does not work yet)</span></h3>
+      <hr/>
+      <p> <span>Proposals must be endorsed by a number of peers to be successful. </span><span>The exact number of endorsements will be dictated by your network's policy. </span><span>If you are new to Marbles or Fabric then select the first endorser. </span></p>
+      <br/><br/>
+      <p>Every checked endorser below will receive marble proposals.</p>
+      <div class="settingPeersWrap">
+         <p> <span>Endorser 1</span><input class="longer" type="text" placeholder="Peer URL" name="peer1" /><input type="checkbox" name="peer1" /></p>
+         <p> <span>Endorser 2</span><input class="longer" type="text" placeholder="Peer URL" name="peer2" /><input type="checkbox" name="peer2" /></p>
+      </div>
+      <p><button type="button" disabled="disabled">Add Endorser</button></p>
+   </div>
+</div>
+

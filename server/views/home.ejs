@@ -1,0 +1,88 @@
+<html>
+<head>
+	 <link rel="icon" type="image/png" href="/static/images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="/static/css/lib/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/lib/fontawesome-all.css">
+    <!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+
+	
+</head>
+<body>
+	<div id="rightEverything">
+		<div id="tint">
+				</div>
+
+			<div id="navPanel">
+				<div id="logo">
+					<img id="logoIcon" src="/static/imgs/logo.png">
+					<span id="organisation"></span>
+				</div>
+				<div id="whoamI">
+					<span class="fa fa-user" id="userIcon"></span>
+					<span id="userField">Admin &nbsp;</span>
+					<span class="fa fa-angle-down"></span>
+				</div>
+			</div>
+			<div id="mainPanel">
+				<div id="notificationsWrap">
+					<div id="noticeScrollWrap">
+						<div class="hint" id="emptyNotifications">No notifications</div>
+					</div>
+					<div id="notificationHandle">
+						<span class="fa fa-angle-down"></span>
+					</div>
+				</div>
+				<div id="auditButton">
+					<span class="fa fa-search"></span>
+				</div>
+				<div id="contentPanel">
+						<% include ./home_panel.ejs %>
+						<% include ./create_panel.ejs %>
+						<% include ./startup_panel.ejs %>
+						<% include ./tx_story.ejs %>
+						<% include ./settings.ejs %>
+										
+				</div>	
+			</div>
+			<br>
+			<br>
+			<br>
+			<div id="footerPanel">
+				<div id="blockWrap">
+					<div id="blockLegend">BLOCKS</div>
+					<div id="details"></div>
+				</div>
+			</div>
+	</div>
+	<div id="#leftEverything">
+			<div id="auditWrap">
+			<div id="auditClose"><span class="fa fa-close"></span></div>
+			<div id="auditContentWrap">
+				<div class="leftTxWrap">
+					<div id="auditLegend">AUDIT</div>
+					<div id="marbleIdWrap"> <span>Stamp</span>
+						<div id="marbleId">-</div>
+					</div><span class="ball largeMarble bluebg auditMarble"></span></div>
+				<div class="txHistoryWrap">
+					<div class="auditHint">Click a Stamp to Audit Its Transactions</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="/static/js/lib/jquery-3.3.1.min.js"></script>
+	<script src="/static/js/lib/bootstrap.min.js"></script>	
+	<script src="/static/js/lib/jquery-ui.min.js"></script>
+	<script src="/static/js/funk.js"></script>
+	<script src="/static/js/blockchain.js"></script>
+	<script src="/static/js/ui_building.js"></script>
+	<script src="/static/js/ui_events.js"></script>
+	<script src="/static/js/websocket.js"></script>
+	<script src="/static/js/startup.js"></script>
+	<script src="/static/js/tx_story.js"></script>
+	<script>
+		
+	</script>
+</html>

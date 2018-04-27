@@ -9,11 +9,12 @@
 	var start_up_states = {												//Stamp Server Startup Steps
 		checklist: { state: 'waiting', step: 'step1' },					// Step 1 - check config files for somewhat correctness
 		Adminenrolling: { state: 'waiting', step: 'step2' },			// Step 2 - enroll the admin
-		Userenrolling:	{ state: 'waiting', step: 'step2' },			// Step 3 - enroll the user	
-		find_chaincode: { state: 'waiting', step: 'step3' },			// Step 4 - find the chaincode on the channel
-		register_owners: { state: 'waiting', step: 'step4' },			// Step 45 - create the stamp owners
+		Userenrolling:	{ state: 'waiting', step: 'step3' },			// Step 3 - enroll the user	
+		find_chaincode: { state: 'success', step: 'step4' },			// Step 4 - find the chaincode on the channel
+					
 	};
-
+var logger = require(appRoot + '/utils/log')
+var cp_general = require(appRoot+'/config/general');
 	//--------------------------------------------------------
 	// Setup WS Module
 	//--------------------------------------------------------
@@ -51,6 +52,59 @@
 	ws_server.process_msg = function (ws, data) {
 		
 		logger.info(data)
+		var options = {
+			
+			ws: ws,
+			
+		};
+
+		 if (data.type === 'read_everything') {
+			logger.info('[ws] read everything req');
+			ws_server.check_for_updates(ws);
+		} else if (data.type === 'audit') {
+			if (data.stamp_id) {
+				logger.info('[ws] audit history');
+				var request = {
+						//targets : --- letting this default to the peers assigned to the channel
+						chaincodeId: cp_general.chaincodeId,
+						fcn: 'getHistory',
+						args: [data.stamp_id]
+					};
+				fcw.query_transaction(request, function (err, resp) {
+					if (err != null) send_err(err, resp);
+					else options.ws.send(JSON.stringify({ msg: 'history', data: resp }));
+				});
+			}
+		} else if (data.type === 'create') {
+			logger.info('[ws] create Stamp req');
+			
+			var options = [data.key, data.timestamp, data.hash, data.attachLength]
+			for(var i=0;i<data.attachLength;i++){
+				options.push(attach[i]);
+				}
+			options.push(data.State);
+			options.push(data.signLength);
+			for(var i=0;i<data.signLength;i++){
+				options.push(data.sign[i].sign);
+				options.push(data.sign[i].id);				
+			}
+						request = {
+					//targets: let default to the peer assigned to the client
+					chaincodeId: cp_general.chaincodeId,
+					fcn: 'createStamp',
+					args:options,
+					chainId: cp_general.channel,
+				};
+			fcw.create_transaction(options, function (err, resp) {
+				if (err != null) send_err(err, data);
+				else options.ws.send(JSON.stringify({ msg: 'tx_step', state: 'finished' }));
+			});
+		}
+
+
+
+
+
 
 		// send transaction error msg
 		function send_err(msg, input) {
@@ -128,7 +182,7 @@
 								msg: 'block',
 								e: null,
 								block_height: resp.height.low,
-								block_delay: cp.getBlockDelay()
+								block_delay: cp_general.blockDelay
 							};
 							ws_client.send(JSON.stringify(obj)); 										//send to a client
 						}
@@ -148,7 +202,51 @@
 
 	// read complete state of Stamp world
 	function read_everything(ws_client, cb) {
-		
+		logger.info('[ws] audit history');
+		var request = {
+				//targets : --- letting this default to the peers assigned to the channel
+				chaincodeId: cp_general.chaincodeId,
+				fcn: 'readEverything',
+				args: []
+			};
+		fcw.query_transaction(request, function (err, resp) {
+			if (err != null) {
+				logger.debug('[checking] could not get everything:', err);
+				var obj = {
+					msg: 'error',
+					e: err,
+				};
+				if (ws_client) ws_client.send(JSON.stringify(obj)); 								//send to a client
+					else wss.broadcast(obj);																//send to all clients
+				if (cb) cb();
+			}else {
+				var data = resp;
+				logger.debug(resp);
+				if (data && data.stamps) {
+					logger.debug('[checking] number of stamps:', data.stamps.length);
+				}
+
+				data.stamps = organize_usernames(data.stamps);
+				var knownAsString = JSON.stringify(known_everything);			//stringify for easy comparison (order should stay the same)
+				var latestListAsString = JSON.stringify(data);
+
+				if (knownAsString === latestListAsString) {
+					logger.debug('[checking] same everything as last time');
+					if (ws_client !== null) {									//if this is answering a clients req, send to 1 client
+						logger.debug('[checking] sending to 1 client');
+						ws_client.send(JSON.stringify({ msg: 'everything', e: err, everything: data }));
+					}
+				}
+				else {															//detected new things, send it out
+					logger.debug('[checking] there are new things, sending to all clients');
+					known_everything = data;
+					wss.broadcast({ msg: 'everything', e: err, everything: data });	//sent to all clients
+				}
+				if (cb) cb();
+			}
+		});
+			
+
 	}
 
 	// organize the Stamp owner list

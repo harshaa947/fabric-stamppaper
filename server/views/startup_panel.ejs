@@ -1,0 +1,175 @@
+<div id="startUpPanel" class="hideMe">
+	<span class="fa fa-close closeStartUp" id="closeStartUp"></span>
+	<div id="stepWelcomeWrap">
+		<div id="rightSide">
+			<div class="headingText"><span>Welcome to the Stamp&nbsp;</span><strong>Hyperledger Fabric&nbsp;</strong><span>demo!</span></div><br/>
+				<p class="centerText"><span class="chooseTxt">How should we setup?</span><br/><span class="hint guideHints" style="margin-left: -170px;"><span>Already a fabric expert? Default setup here.&nbsp;&nbsp;</span><span class="fa fa-arrow-right"></span></span><button class="guideButtons"
+						id="instantSetup"><span class="fa fa-rocket">&nbsp;&nbsp;&nbsp;</span><span>Express</span></button><span>&nbsp;&nbsp;&nbsp;</span><button class="guideButtons" id="startSteps"><span class="fa fa-gears">&nbsp;&nbsp;&nbsp;</span><span>Guided</span></button>
+					<span
+						class="hint guideHints"><span class="fa fa-arrow-left"></span><span>&nbsp;&nbsp;Want to learn about fabric or customize the setup?</span></span><br/><br/>
+						<div class="warningWrap" id="wait4cc">
+							<p>Your chaincode is still starting. We need to wait...</p>
+							<div id="dateChecked">Checking</div>
+						</div>
+						<div class="warningWrap" id="failedSetup">
+							<p><span class="fa fa-bug">&nbsp;&nbsp;&nbsp;</span><span>Boo, there is an issue with the configuration or network.&nbsp;</span><span>Enter the&nbsp;</span><strong>Guided</strong>
+								<spansetup>&nbsp;setup to correct it.</spansetup>
+							</p>
+						</div>
+				</p>
+		</div>
+		<div class="centerText">
+			<div class="loadingdiv"><span></span><span></span><span></span><span></span><span></span>
+				<div>
+		</div>
+    </div>
+</div>
+	</div>
+	
+	<div id="stepsWrap">
+		<div class="oneStepWrap successfulStepIcon onStep" stepid="step1">
+			<div class="stepIcon bounce">1</div>
+		</div>
+		<div class="oneStepWrap" stepid="step2">
+			<div class="stepDivide"></div>
+			<div class="stepIcon">2</div>
+		</div>
+		<div class="oneStepWrap inactive" stepid="step3">
+			<div class="stepDivide"></div>
+			<div class="stepIcon">3</div>
+		</div>
+		<div class="oneStepWrap inactive" stepid="step4">
+			<div class="stepDivide"></div>
+			<div class="stepIcon">4</div>
+		</div>
+		<div class="oneStepWrap inactive" stepid="step5">
+			<div class="stepDivide"></div>
+			<div class="stepIcon">5</div>
+		</div>
+		<div id="stepsTitle">There are 5 steps to complete. Click a step to jump to it.</div>
+	</div>
+	
+	<div id="detailsWrap">
+		<div class="stepWrap success" id="step1">
+		   <div class="stepHeader"><span class="fa fa-gear"></span><span>&nbsp;&nbsp;Check Connection Profile Data</span></div>
+		   <div class="stepDescription"><span>The first step was to check your connection profile JSON for easy to make mistakes.</span><br/><span>Your setup is using an environmental variable for the connection profile.</span><span>If you need to edit this, you will need to restart Marbles.</span><span>The files that were checked are:&nbsp;</span>
+			  <span
+				 class="backgroundMe">/config/#</span><span>&nbsp;and&nbsp;</span><span class="backgroundMe">/config/#</span><span>&nbsp;.</span><br/><br/><span>The results are below!</span>
+		   </div>
+		   <div class="failureStep">
+			  <p><span>Uh oh, there is something wrong with the config files.</span><span>The server's console has more information.</span></p>
+			  <br/>
+			  <p style="font-weight: 200;"><span>Checkout the documentation we have on the</span><a href="https://github.com/IBM-Blockchain/marbles/blob/v4.0/docs/config_file.md" target="_blank" style="color:#fff;">config files.</a></p>
+		   </div>
+		   <br/>
+		   <div class="successStep">Step 1 Complete</div>
+		   <br/><br/><button class="nextStep" nextstepid="step2">Next Step</button>
+		</div>
+		
+		<div class="stepWrap hidden" id="step2">
+		   <div class="stepHeader"><span class="fa fa-user"></span><span>&nbsp;&nbsp;Enrolling Admin</span></div>
+		   <div class="stepDescription"><span>Next up, we attempted to enroll you as your company's admin.</span><span>This step contacted your Certificate Authority (CA) and fed it the&nbsp;</span><span class="backgroundMe">enrollID</span><span>&nbsp;and&nbsp;</span><span class="backgroundMe">enrollSecret</span><span>&nbsp;from your connection profile.</span><br/></div>
+		   <div
+			  class="loadingdiv">
+			  <span></span><span></span><span></span><span></span><span></span>
+			  <div></div>
+		   </div>
+		   <div class="failureStep">
+			  <p>Sorry, we could not enroll the admin against the CA.</p>
+			  <p>Edit the settings below to try again.</p>
+		   </div>
+		   <div class="startupWrap">
+			  <div class="settingsExpand"><span class="fa fa-plus-square"></span><span>&nbsp;&nbsp;JSON Settings</span></div>
+			  <div class="settingsContent">
+				 <div class="stepInputLegend"><span>CA's</span><span class="backgroundMe">api_url</span></div>
+				 <input class="longer" type="text" placeholder="CA ex: 192.168.99.100:8888" name="caUrl" value="ca" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is main HTTP url to reach your certificate authority. It should include the protocol and port.</span></span><br/>
+				 <div
+					class="stepInputLegend"><span class="backgroundMe">enrollId</span></div>
+				 <input class="longer" type="text" placeholder="Enroll Id" name="enrollId" value="admin_id" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is a valid enroll id for your CA. It should already be registered on the CA.</span></span><br/>
+				 <div
+					class="stepInputLegend"><span class="backgroundMe">enrollSecret</span></div>
+				 <input class="longer" type="text" placeholder="Enroll Secret" name="enrollSecret" value="admin_secret" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">The enroll secret is paired with an enroll ID registered on the CA.</span></span>
+			  </div>
+		   </div>
+		   <div class="successStep">Step 2 Complete</div>
+		   <button class="nextStep" nextstepid="step3">Next Step</button><button class="runStep" stepid="step2" nextstepid="step3" id="enrollAdmin">Try Again</button>
+		   <div class="showMoreDetails">Why is this important?</div>
+		   <div class="moreDetails"><span>If successful, the application will download an enrollment certificate.</span><span>The certificate will be used to authenticate future marbles transactions.</span><span>Without it we cannot create transactions.</span></div>
+		</div>
+		
+		<div class="stepWrap hidden" id="step3">
+		   <div class="stepHeader"><span class="fa fa-user"></span><span>&nbsp;&nbsp;Enrolling user</span></div>
+		   <div class="stepDescription"><span>Next up, we attempted to enroll a user.</span><span>This step contacted your Certificate Authority (CA) and fed it the&nbsp;</span><span class="backgroundMe">enrollID</span><span>&nbsp;and&nbsp;</span><span class="backgroundMe">enrollSecret</span><span>&nbsp;from your connection profile.</span><br/></div>
+		   <div
+			  class="loadingdiv">
+			  <span></span><span></span><span></span><span></span><span></span>
+			  <div></div>
+		   </div>
+		   <div class="failureStep">
+			  <p>Sorry, we could not enroll the user against the CA.</p>
+			  <p>Edit the settings below to try again.</p>
+		   </div>
+		   <div class="startupWrap">
+			  <div class="settingsExpand"><span class="fa fa-plus-square"></span><span>&nbsp;&nbsp;JSON Settings</span></div>
+			  <div class="settingsContent">
+				 <div class="stepInputLegend"><span>CA's</span><span class="backgroundMe">api_url</span></div>
+				 <input class="longer" type="text" placeholder="CA ex: 192.168.99.100:8888" name="caUrl" value="ca" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is main HTTP url to reach your certificate authority. It should include the protocol and port.</span></span><br/>
+				 <div
+					class="stepInputLegend"><span class="backgroundMe">enrollId</span></div>
+				 <input class="longer" type="text" placeholder="Enroll Id" name="enrollId" value="admin_id" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is a valid enroll id for your CA. It should already be registered on the CA.</span></span><br/>
+				 </div>
+		   </div>
+		   <div class="successStep">Step 3 Complete</div>
+		   <button class="nextStep" nextstepid="step4">Next Step</button><button class="runStep" stepid="step3" nextstepid="step4" id="enrollAdmin">Try Again</button>
+		   <div class="showMoreDetails">Why is this important?</div>
+		   <div class="moreDetails"><span>If successful, the application will download an enrollment certificate.</span><span>The certificate will be used to authenticate future marbles transactions.</span><span>Without it we cannot create transactions.</span></div>
+		</div>
+		
+		<div class="stepWrap hidden" id="step4">
+		   <div class="stepHeader"><span class="fa fa-file-text"></span><span>&nbsp;&nbsp;Finding Chaincode</span></div>
+		   <div class="stepDescription"><span>Now we needed to locate the chaincode on your channel.</span><span>Your connection profile says to check the channel&nbsp;</span><span class="backgroundMe"> </span><span>&nbsp;for the chaincode named&nbsp;</span><span class="backgroundMe"> </span><span>&nbsp;.</span><br/></div>
+		   <div
+			  class="loadingdiv">
+			  <span></span><span></span><span></span><span></span><span></span>
+			  <div></div>
+		   </div>
+		   <div class="failureStep">
+			  <p>We could not find the chaincode</p>
+			  <p>Edit the settings below to try again</p>
+			  <p style="font-weight: 200;">OR...</p>
+			  <p style="font-weight: 200;"><span>If this is your first time using the application then&nbsp;</span><a href="https://github.com/IBM-Blockchain/marbles/tree/v4.0#3-install-and-instantiate-chaincode" target="_blank" style="color:#fff;">install/instantiate</a><span>&nbsp;marbles chaincode</span></p>
+		   </div>
+		   <div class="startupWrap">
+			  <div class="settingsExpand"><span class="fa fa-plus-square"></span><span>&nbsp;&nbsp;JSON Settings</span></div>
+			  <div class="settingsContent">
+				 <div class="stepInputLegend"><span>Orderer's</span><span class="backgroundMe">discovery_url</span></div>
+				 <input class="longer" type="text" placeholder="Orderer ex: 192.168.99.100:5151" name="ordererUrl" value="orderer" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is the main gRPC url to reach your orderer. It should include the protocol and port. You will be sending marbles transactions here for ordering.</span></span><br/>
+				 <div
+					class="stepInputLegend"><span>Peer's</span><span class="backgroundMe">discovery_url</span></div>
+				 <input class="longer" type="text" placeholder="Peer ex: 192.168.99.100:7051" name="peerUrl" value="peer" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is the main gRPC url to reach your peer.  It should include the protocol and port. You will be sending marble transactions here for endorsement.</span></span><br/>
+				 <div
+					class="stepInputLegend"><span class="backgroundMe">channel</span></div>
+				 <input class="longer" type="text" placeholder="Channel Name" name="channelId" value="channel" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is the name of a channel you created on the blockchain network.</span></span><br/>
+				 <div
+					class="stepInputLegend"><span class="backgroundMe">chaincode_id</span></div>
+				 <input class="longer" type="text" placeholder="Chaincode ID" name="chaincodeId" value="chaincode_id" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is the name of your instantiated chaincode. ex: marbles.</span></span><br/>
+				 <div
+					class="stepInputLegend"><span class="backgroundMe">chaincode_version</span></div>
+				 <input class="longer" type="text" placeholder="Chaincode ID" name="chaincodeVersion" value="chaincode_version" /><span class="fa fa-question-circle settingstooltip"><span class="tooltiptext">This is the version of your instantiated chaincode. ex: v4.</span></span>
+			  </div>
+		   </div>
+		   <div class="successStep">Step 4 Complete</div>
+		   <br/><button class="nextStep" nextstepid="step5">Next Step</button><button class="runStep" stepid="step4" nextstepid="step5" id="findCcButton">Try Again</button>
+		   <div class="showMoreDetails">Why is this important?</div>
+		   <div class="moreDetails"><span>Each channel on the network has its own ledger to store transactions.</span><span>When our chaincode is running on a channel we will be able to create and store these transactions.</span><span>There might be other types of activity on the channel, but we won't be concern with them.</span><br/><br/><span>The chaincode itself is code written in GoLang.</span><span>It defines the assets (marbles) and the rules around marble transfers.</span><span>Our chaincode transactions will create and modify marbles, marble owners, and marble companies.</span><span>We cannot use this application until the chaincode is instantiated on a channel.</span></div>
+		</div>
+		
+		<div class="stepWrap hidden success" id="step5">
+		   <span class="fa fa-smile-o fa-3x"></span>
+		   <div class="stepDescription" style="text-align:center;"><span>Your Stamp application is ready to use!</span><br/><br/></div>
+		   <button class="closeStartUp" type="button">Enter</button>
+		</div>
+		
+	</div>
+</div>
+
