@@ -2,3 +2,6 @@ fabstamp/node_modules/
 fabstamp/hfc-key-store/
 basic-network/crypto-config/
 basic-network/config/
+server/hfc-key-store
+server/node_modules
+server/config/private.js

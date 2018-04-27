@@ -1,0 +1,32 @@
+{
+    "name": "fabcar",
+    "version": "1.0.0",
+    "description": "Hyperledger Fabric Satmp Application",
+    "main": "fabcar.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "async": "^2.6.0",
+        "compression": "^1.7.2",
+        "cookie-parser": "^1.4.3",
+        "cors": "^2.8.4",
+        "express": "^4.16.3",
+        "express-session": "^1.15.6",
+        "fabric-ca-client": "^1.1.0",
+        "fabric-client": "^1.1.0",
+        "node-pre-gyp": "^0.9.1",
+        "serve-static": "^1.13.2",
+        "winston": "^2.4.2",
+        "ws": "^5.1.1"
+    },
+    "author": "Anthony O'Dowd",
+    "license": "Apache-2.0",
+    "keywords": [
+        "Hyperledger",
+        "Fabric",
+        "Car",
+        "Sample",
+        "Application"
+    ]
+}
