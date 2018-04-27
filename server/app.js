@@ -30,9 +30,14 @@ var path = require('path');
 global.appRoot = path.resolve(__dirname);
 var logger = require('./utils/log')
 var ws_server = require('./utils/websocket_server_side.js');
-
+var startup_lib = require('./utils/startup.js');
 var misc = require('./utils/misc.js');												// mis.js has generic (non-blockchain) related functions
 var cp_general = require(appRoot+'/config/general');
+
+
+
+
+
 // --- Setup Express --- //
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -53,7 +58,7 @@ app.use(require('./routes'));
 // ============================================================================================================================
 var port = cp_general.port;
 var host = cp_general.host;
-var server = http.createServer(app).listen(port, function () { });
+var server = http.createServer(app) //.listen(port, function () { });
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 server.timeout = 240000;
 console.log('\n');
@@ -77,7 +82,7 @@ process.on('uncaughtException', function (err) {
 	}
 });
 setupWebSocket();											// http server is already up, make the ws one now
-
+let config_error = false;
 if (config_error) {
 	ws_server.record_state('checklist', 'failed');			// checklist step is done
 	ws_server.broadcast_state();
@@ -89,33 +94,28 @@ if (config_error) {
 	startup_lib.enroll_admin(1, function (e) {
 		if (e != null) {
 			logger.warn('Error enrolling admin');
-			ws_server.record_state('enrolling', 'failed');
+			ws_server.record_state('Adminenrolling', 'failed');
 			ws_server.broadcast_state();
 			startup_lib.startup_unsuccessful(host, port);
 		} else {
 			logger.info('Success enrolling admin');
-			ws_server.record_state('enrolling', 'success');
+			ws_server.record_state('Adminenrolling', 'success');
 			ws_server.broadcast_state();
 
-			// --- [2] Setup Marbles Library --- //
-			startup_lib.setup_marbles_lib(host, port, function () {
+			// --- [2] Setup User --- //
+			startup_lib.enrollUser(1, function (e) {
 
-				// --- [3] Check If We have Started Marbles Before --- //
-				startup_lib.detect_prev_startup({ startup: true }, function (err) {
-					if (err) {
-						startup_lib.startup_unsuccessful(host, port);
-					} else {
-						console.log('\n\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
-						logger.debug('Detected that we have launched successfully before');
-						logger.debug('Welcome back - Marbles is ready');
-						logger.debug('Open your browser to http://' + host + ':' + port + ' and login as "admin"');
-						console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n');
-					}
-				});
-
-				// --- [4] Wait for the user to go to the browser (step 5 is in websocket code below) --- //
-				// ZZzzzzzZZZzzzzzzzzZZzZZZZZzzzZZZzzz
-			});
+						if (e != null) {
+							logger.warn('Error enrolling user');
+							ws_server.record_state('Userenrolling', 'failed');
+							ws_server.broadcast_state();
+							startup_lib.startup_unsuccessful(host, port);
+						} else {
+							logger.info('Success enrolling user');
+							ws_server.record_state('Userenrolling', 'success');
+							ws_server.broadcast_state();
+							}
+					 });
 		}
 	});
 }
