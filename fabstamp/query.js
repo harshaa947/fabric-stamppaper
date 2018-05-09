@@ -23,7 +23,7 @@ channel.addPeer(peer);
 
 //
 var member_user = null;
-var store_path = path.join(__dirname, 'hfc-key-store');
+var store_path = path.join('../server/hfc-key-store');
 console.log('Store path:'+store_path);
 var tx_id = null;
 
@@ -51,18 +51,18 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 
 	// queryCar chaincode function - requires 1 argument, ex: args: ['CAR4'],
 	// queryAllCars chaincode function - requires no arguments , ex: args: [''],
-	/*const request = {
+	const request = {
 		//targets : --- letting this default to the peers assigned to the channel
 		chaincodeId: 'fabstamp',
-		fcn: 'readEverything',
-		args: ['Stamp56']
-	};*/
-const request = {
+		fcn: 'getHistory',
+		args: ['Stamp0']
+	};
+	/*const request = {
 		//targets : --- letting this default to the peers assigned to the channel
 		chaincodeId: 'fabstamp',
 		fcn: 'queryStamp',
 		args: ['Stamp56']
-	};
+	};*/
 	// send the query proposal to the peer
 	return channel.queryByChaincode(request);
 }).then((query_responses) => {

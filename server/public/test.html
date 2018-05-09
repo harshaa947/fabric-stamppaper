@@ -1,0 +1,64 @@
+<link rel="stylesheet" href="/static/css/test.css">
+<div class="stamp">
+	<div class="stampduty"><span class="center">40</span></div>
+	<div class="instrument"><span class="property">Instrument : </span><span>I am instrument hash</span></div>
+	<div class="state"><span class="property">State : </span>Rajasthan</div>
+	<div class="attachments">
+		<span class="property">Attachments : </span>
+		<ol>
+			<li>I am attachment one</li>
+			<li>I am attachment two</li>
+		</ol>
+	</div>
+	<div class="signatures">
+		<span class="property">Signatures : </span>
+		<ol>
+			<li>Party1</li>
+			<li>Party2</li>
+		</ol>
+	</div>
+</div>
+	<input name="timestamp" type="datetime-local" id="timestamp" value="2018-04-19T04:52"> </legend>
+			<legend>
+				<label for="hash" >Hash : </label>
+				<input name="hash" type="file" id="hash" value=""></legend>
+			<legend>
+				<button id="iambutton">Click Me</button>
+<script src="/static/js/lib/jquery-3.3.1.min.js"></script>
+<script src="/static/js/lib/sjcl.js"></script>
+<script>
+function getBase64(file,cb) {
+   var reader = new FileReader();
+   reader.readAsDataURL(file);
+   reader.onload = function () {
+    cb(null,reader.result);
+   };
+   reader.onerror = function (error) {
+     console.log('Error: ', error);
+     cb(1,error);
+   };
+}
+
+function calculatesha256(file,cb){
+	getBase64(file,function(err,resp){
+		if(err){
+			cb(1,err);
+			}else{
+				var text = sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash(resp));
+				cb(null,text)
+				}
+		});
+	}
+	
+$("#iambutton").click(function(){
+	var file = document.querySelector('input[name="hash"]').files[0];
+	calculatesha256(file,function(err,text){
+		
+		console.log(text);
+		});
+		var reader = new FileReaderSync();
+		var text = jcl.codec.hex.fromBits(sjcl.hash.sha512.hash(reader.readAsDataURL(file)));
+		console.log(text);
+	})
+
+</script>

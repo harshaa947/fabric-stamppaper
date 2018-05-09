@@ -151,8 +151,11 @@ function enrollUser(cb){
 }
 
 function queryTransaction(request,cb){
+	logger.info(request);
 	channel.queryByChaincode(request).then((query_responses) => {
 			logger.debug("Query has completed, checking results");
+			logger.debug(query_responses.toString());
+			
 			// query_responses could have more than one  results if there multiple peers were used as targets
 			if (query_responses && query_responses.length >= 1) {
 				if (query_responses[0] instanceof Error) {
@@ -163,20 +166,23 @@ function queryTransaction(request,cb){
 					cb(null,JSON.parse(query_responses[0].toString()));
 				}
 			} else {
-				cb(null,null);
 				logger.debug("No payloads were returned from query");
+				cb(null,null);
+				
 			}
 		}).catch((err) => {
-			cb(1,err);
 			logger.error('Failed to query successfully :: ' + err);
+			cb(1,err);
+			
 		});
 	}
 	
 	
-function createTransaction(request,cb){
+function createTransaction(request,ws,cb){
 	tx_id = fabric_client.newTransactionID();
 	request.txId = tx_id;
-	channel.sendTransactionProposal.then((results) => {
+	ws.send(JSON.stringify({ msg: 'tx_step', state: 'building_proposal' }));
+	channel.sendTransactionProposal(request).then((results) => {
 			var proposalResponses = results[0];
 			var proposal = results[1];
 			let isProposalGood = false;
@@ -188,6 +194,7 @@ function createTransaction(request,cb){
 					console.error('Transaction proposal was bad');
 				}
 			if (isProposalGood) {
+				ws.send(JSON.stringify({ msg: 'tx_step', state: 'endorsing' }));
 				logger.debug(util.format(
 					'Successfully sent Proposal and received ProposalResponse: Status - %s, message - "%s"',
 					proposalResponses[0].response.status, proposalResponses[0].response.message));
@@ -221,6 +228,7 @@ function createTransaction(request,cb){
 						resolve({event_status : 'TIMEOUT'}); //we could use reject(new Error('Trnasaction did not complete within 30 seconds'));
 					}, 3000);
 					event_hub.connect();
+					
 					event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
 						// this is the callback for transaction event status
 						// first some clean up of event listener
@@ -234,7 +242,7 @@ function createTransaction(request,cb){
 							logger.error('The transaction was invalid, code = ' + code);
 							resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
 						} else {
-							loger.debug('The transaction has been committed on peer ' + event_hub._ep._endpoint.addr);
+							logger.debug('The transaction has been committed on peer ' + event_hub._ep._endpoint.addr);
 							resolve(return_status);
 						}
 					}, (err) => {
@@ -253,6 +261,7 @@ function createTransaction(request,cb){
 			console.log('Send transaction promise and event listener promise have completed');
 			// check the results in the order the promises were added to the promise all list
 			if (results && results[0] && results[0].status === 'SUCCESS') {
+				ws.send(JSON.stringify({ msg: 'tx_step', state: 'ordering' }));
 				logger.debug('Successfully sent transaction to the orderer.');
 			} else {
 				cb(1,reponse.status)
@@ -260,6 +269,7 @@ function createTransaction(request,cb){
 			}
 
 			if(results && results[1] && results[1].event_status === 'VALID') {
+				ws.send(JSON.stringify({ msg: 'tx_step', state: 'committing' }));
 				cb(null,results);
 				logger.debug('Successfully committed the change to the ledger by the peer');
 			} else {
@@ -268,7 +278,7 @@ function createTransaction(request,cb){
 			}
 		}).catch((err) => {
 			cb(3,err);
-			logger.error('Failed to invoke successfully :: ' + err);
+			logger.error('Failed to invoke successfully :: ' + err.stack ? err.stack : err);
 		});
 }
 

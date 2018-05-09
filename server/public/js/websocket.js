@@ -59,15 +59,11 @@ function connect_to_server() {
 				clear_trash();
 				console.log(msgObj.everything);
 				for (var i in msgObj.everything.stamps) {
-					populate_stamps(msgObj.everything.keys[i],msgObj.everything.stamps[i]);
+					build_stamp(msgObj.everything.keys[i],msgObj.everything.stamps[i]);
 				}
 
 				start_up = false;
-				$('.marblesWrap').each(function () {
-					if ($(this).find('.innerWrap').find('.ball').length === 0) {
-						$(this).find('.noMarblesMsg').show();
-					}
-				});
+				$('#appCreate').html('<i class="fa fa-plus addStamp"></i>');
 			}
 
 			
@@ -128,7 +124,7 @@ function connect_to_server() {
 				} else {											//if we already showing tx, prepend to front
 					console.log('skipping tx', count);
 					for (x = msgObj.data.parsed.length - 1; x >= count; x--) {
-						var html = build_a_tx(msgObj.data.parsed[x], x);
+						var html = build_a_tx(msgObj.data.parsed[x], x,msgObj.data.key);
 						$('.txHistoryWrap').prepend(html);
 						$('.txDetails:first').animate({ opacity: 1, left: 0 }, 600, function () {
 							//after animate
@@ -137,6 +133,7 @@ function connect_to_server() {
 				}
 			}
 
+			
 
 			//unknown
 			else console.log(wsTxt + ' rec', msgObj.msg, msgObj);
@@ -209,7 +206,12 @@ function slowBuildtx(data, txNumber, built) {
 		});
 	}, (built * 150)));
 }
-
+function refreshHomePanel() {
+	clearTimeout(pendingTransaction);
+	pendingTransaction = setTimeout(function () {								//need to wait a bit
+		get_everything_or_else();
+	}, block_ui_delay);
+}
 
 //get everything with timeout to get it all again!
 function get_everything_or_else(attempt) {

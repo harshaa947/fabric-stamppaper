@@ -51,8 +51,8 @@ var cp_general = require(appRoot+'/config/general');
 	
 	ws_server.process_msg = function (ws, data) {
 		
-		logger.info(data)
-		var options = {
+		//logger.info(data)
+		var options_ws = {
 			
 			ws: ws,
 			
@@ -63,30 +63,38 @@ var cp_general = require(appRoot+'/config/general');
 			ws_server.check_for_updates(ws);
 		} else if (data.type === 'audit') {
 			if (data.stamp_id) {
-				logger.info('[ws] audit history');
+				logger.info('[ws] audit history ');
 				var request = {
 						//targets : --- letting this default to the peers assigned to the channel
 						chaincodeId: cp_general.chaincodeId,
 						fcn: 'getHistory',
 						args: [data.stamp_id]
 					};
+				console.log(request);	
 				fcw.query_transaction(request, function (err, resp) {
+					logger.debug(resp);
 					if (err != null) send_err(err, resp);
-					else options.ws.send(JSON.stringify({ msg: 'history', data: resp }));
+					
+					else {
+						var out_data = {}
+						out_data.parsed = resp;
+						out_data.key = data.stamp_id;
+						options_ws.ws.send(JSON.stringify({ msg: 'history', data: out_data }));
+					}
 				});
 			}
 		} else if (data.type === 'create') {
 			logger.info('[ws] create Stamp req');
 			
-			var options = [data.key, data.timestamp, data.hash, data.attachLength]
+			var options = [data.key, data.timestamp, data.hash, data.attachLength+'']
 			for(var i=0;i<data.attachLength;i++){
-				options.push(attach[i]);
+				options.push(data.attach[i]);
 				}
-			options.push(data.State);
-			options.push(data.signLength);
+			options.push(data.state);
+			options.push(data.signLength+'');
 			for(var i=0;i<data.signLength;i++){
 				options.push(data.sign[i].sign);
-				options.push(data.sign[i].id);				
+				options.push(data.sign[i].id+'');				
 			}
 						request = {
 					//targets: let default to the peer assigned to the client
@@ -95,9 +103,11 @@ var cp_general = require(appRoot+'/config/general');
 					args:options,
 					chainId: cp_general.channel,
 				};
-			fcw.create_transaction(options, function (err, resp) {
+				console.log(request);
+			fcw.create_transaction(request,ws, function (err, resp) {
+				
 				if (err != null) send_err(err, data);
-				else options.ws.send(JSON.stringify({ msg: 'tx_step', state: 'finished' }));
+				else ws.send(JSON.stringify({ msg: 'tx_step', state: 'finished' }));
 			});
 		}
 
@@ -226,7 +236,7 @@ var cp_general = require(appRoot+'/config/general');
 					logger.debug('[checking] number of stamps:', data.stamps.length);
 				}
 
-				data.stamps = organize_usernames(data.stamps);
+				data.stamps = organize_stamps(data.stamps);
 				var knownAsString = JSON.stringify(known_everything);			//stringify for easy comparison (order should stay the same)
 				var latestListAsString = JSON.stringify(data);
 
@@ -251,7 +261,7 @@ var cp_general = require(appRoot+'/config/general');
 
 	// organize the Stamp owner list
 	function organize_usernames(data) {
-		return data;
+		return sort_stamps(data);
 	}
 
 	//
@@ -260,8 +270,15 @@ var cp_general = require(appRoot+'/config/general');
 	}
 
 	// alpha sort everyone else
-	function sort_usernames(temp) {
-		return temp;
+	function sort_stamps(temp) {
+		temp.sort(function (a, b) {
+			var entryA = a.instrument + a.state;
+			var entryB = b.instrument + b.state;
+			if (entryA < entryB) return -1;
+			if (entryA > entryB) return 1;
+			return 0;
+		});
+return temp;
 	}
 
 module.exports = ws_server;

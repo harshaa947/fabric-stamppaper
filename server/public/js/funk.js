@@ -88,3 +88,37 @@ function escapeHtml(str) {
 	}
 	return ret;
 }
+
+function getBase64(file,cb) {
+   var reader = new FileReader();
+   reader.readAsDataURL(file);
+   reader.onload = function () {
+    cb(null,reader.result);
+   };
+   reader.onerror = function (error) {
+     console.log('Error: ', error);
+     cb(1,error);
+   };
+}
+
+function calculatesha256(file,cb){
+	getBase64(file,function(err,resp){
+		if(err){
+			cb(1,err);
+			}else{
+				var text = sjcl.codec.hex.fromBits(sjcl.hash.sha512.hash(resp));
+				cb(null,text)
+				}
+		});
+	}
+	
+function Download(data,file_name) {
+    console.log("adding Link")
+     $("<a />", {
+    "download": file_name,
+    "href" : "data:application/json," + encodeURIComponent(JSON.stringify(data))
+  }).appendTo("body")
+  .click(function() {
+     $(this).remove()
+  })[0].click()
+};

@@ -1,14 +1,122 @@
- <div id="createPanel" class="panel" hidden>
-	<span class="fa fa-close" id="closeCreate">
-	</span>
-	<h2>Create Marble</h2>
-	<hr>
-	<div id="innerWrap">
-		<span class="createStamp">
-		</span>
-		<form action="/app/api/create" method="POST" id="createform">
-			<legend>
-			</legend>
-		</form>
+<div class="panel" id="createPanel" hidden="hidden"><span class="fa fa-close" id="closeCreate"></span>
+<div id="createstepsWrap">
+		<div class="coneStepWrap successfulStepIcon conStep" stepid="createStepOne">
+			<div class="stepIcon bounce">1</div>
+		</div>
+		<div class="coneStepWrap" stepid="createStepTwo">
+			<div class="stepDivide"></div>
+			<div class="stepIcon">2</div>
+		</div>
+		<div class="coneStepWrap" stepid="createStepThree">
+			<div class="stepDivide"></div>
+			<div class="stepIcon">3</div>
+		</div>
+		<div id="stepsTitle">There are 2 steps to complete. Click a step to jump to it.</div>
 	</div>
+	<div id="createdetailsWrap">
+		<div class="stepWrap"  id="createStepOne">
+		   <div class="stepHeader"><span class="fa fa-user"></span><span>&nbsp;&nbsp;Create Stamp</span></div>
+		   <div class="stepDescription"><span>Fill out form to create basic transaction Data.</span><br/></div>
+		   <div
+			  class="loadingdiv">
+			  <span></span><span></span><span></span><span></span><span></span>
+			  <div></div>
+		   </div>			
+			<div id="createinnerWrap cstartupWrap">
+				<form action="/create" method="POST" id="createform">
+				   <br/>
+					<legend> 
+						<select name="state"><option value="">States List</option>
+												<option value="andaman">Andaman  &amp;  Nicobar</option>
+												<option value="andhra">Andhra Pradesh</option>
+												<option value="assam">Assam</option>
+												<option value="bihar">Bihar</option>
+												<option value="chattisgarh">Chhattisgarh</option>
+												<option value="chandigarh">Union Territory of Chandigarh</option>
+												<option value="dadara">UT of Dadra and Nagar Haveli</option>
+												<option value="daman">UT of Daman &amp; Diu</option>
+												<option value="delhi">NCT of Delhi</option>
+												<option value="goa">Goa</option>
+												<option value="guj">Gujarat</option>
+												 <option value="haryana">Haryana</option> 
+												<option value="himachal">Himachal Pradesh</option>
+												<option value="j_k">Jammu &amp; Kashmir</option>
+												<option value="jharkhand">Jharkhand</option>
+												<option value="karnataka">Karnataka</option>
+												<option value="kerala">Kerala</option>
+												<option value="mp">Madhya Pradesh</option>
+												<option value="mh">Maharashtra</option>
+												<option value="manipur">Manipur</option>
+												<option value="meghalaya">Meghalaya</option>
+												<option value="mizoram">Mizoram</option>
+												<option value="nagaland">Nagaland</option>
+												<option value="orissa">Odisha</option> 
+												<option value="pondicherry">Puducherry</option>
+												<option value="punjab">Punjab</option>
+												<option value="raj">Rajasthan</option>
+												<option value="sikkim">Sikkim</option>
+												<option value="tamil">Tamilnadu</option>
+												<option value="tripura">Tripura</option>
+												<option value="up">Uttar Pradesh</option>
+												<option value="uttar">Uttarakhand</option>
+												<option value="westbengal">West Bengal</option>
+							 </select></legend>
+					<legend>
+						<label for="timestamp" >TimeStamp : </label>
+						<input name="timestamp" type="datetime-local" id="timestamp" value="2018-04-19T04:52"> </legend>
+					<legend>
+						<label for="hash" >Hash : </label>
+						<input name="hash" type="file" id="hash" value=""></legend>
+					<legend>
+						<label for="key" >Key : </label>
+						<input name="key" type="text" value="Stamp45" id="key"></legend>
+					<legend id="attachLegend">
+					<span> Attachments :</span> 
+					<i class="fa fa-plus " id="addAttachRow"></i>
+					<i class="fa fa-minus " id="deleteAttachRow"></i>
+					<br>
+					</legend>
+					<!--
+					<legend id="signLegend">
+					<span> Signatures :</span> 
+					<i class="fa fa-plus" id="addSignRow"></i>
+					<br>
+					</legend>-->
+					<button type="button" id="createStampButton"><span class="fa fa-plus-circle">&nbsp;&nbsp;</span><span>Create</span></button>
+				</form>
+			</div>
+			 <div class="successStep">Step 1 Complete</div>
+		   <br/><br/><button class="cnextStep" nextstepid="createStepTwo" hidden>Next Step</button>
+		</div>
+		<div class="stepWrap hidden"  id="createStepTwo">
+			<div class="stepHeader"><span class="fa fa-user"></span><span>&nbsp;&nbsp;View Stamp</span></div>
+		   <div class="stepDescription"><span>Verify the stamp details.</span><br/></div>
+		   <div
+			  class="loadingdiv">
+			  <span></span><span></span><span></span><span></span><span></span>
+			  <div></div>
+		   </div>
+			<div class="cstartupwrap" id="cStampdetail">
+			
+			</div>
+			
+			<div class="successStep">Step 2 Complete</div>
+		   <br/><br/><button class="cnextStep" nextstepid="createStepThree">Next Step</button>
+		</div>
+		<div class="stepWrap hidden"  id="createStepThree">
+			<div class="stepHeader"><span class="fa fa-user"></span><span>&nbsp;&nbsp;Process Stamp</span></div>
+		   <div class="stepDescription"><span>Sign the stamp by your key or download to pass for others or submit to the chain.</span><br/></div>
+		   <div
+			  class="loadingdiv">
+			  <span></span><span></span><span></span><span></span><span></span>
+			  <div></div>
+		   </div>
+			<div class="cstartupWrap">
+			<button id="signTransaction">Sign</button><br><br>
+			<button id="downTransaction">Download</button><br><br>
+			<button id="submitTransaction">Submit</button><br><br>
+			</div>
+			
+		</div>
+    </div>
 </div>

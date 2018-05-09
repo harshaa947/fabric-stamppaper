@@ -18,14 +18,14 @@ var fabric_client = new Fabric_Client();
 
 // setup the fabric network
 var channel = fabric_client.newChannel('mychannel');
-var peer = fabric_client.newPeer('grpc://localhost:7051');
+var peer = fabric_client.newPeer('grpc://127.0.0.1:7051');
 channel.addPeer(peer);
-var order = fabric_client.newOrderer('grpc://localhost:7050')
+var order = fabric_client.newOrderer('grpc://127.0.0.1:7050')
 channel.addOrderer(order);
 
 //
 var member_user = null;
-var store_path = path.join(__dirname, 'hfc-key-store');
+var store_path = '../server/hfc-key-store';
 console.log('Store path:'+store_path);
 var tx_id = null;
 

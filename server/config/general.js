@@ -8,7 +8,7 @@ var config = {
 	"ca_domain":'ca.example.com',
 	"store_path":"hfc-key-store",
 	"channel":"mychannel",
-	"user" :"user123",
+	"user" :"user1",
 	"admin":"admin",
 	"org_msp":"Org1MSP",
 	"user_affilation":"org1.department1",

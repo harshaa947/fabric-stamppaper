@@ -1,0 +1,37 @@
+ .stamp{
+	display:inline-block;
+    min-width:350px;
+    text-align:left;
+    color:#fff;
+    margin-bottom:15px;
+    position:relative;
+    min-height:158px;
+    border-radius:3px;
+    margin-left:10px;
+    margin-right:10px;
+    vertical-align:top;
+    background:#39424d
+	}
+.stampduty{
+	margin-top:5px;
+	min-width:120px;
+	min-height:60px;
+	border: 2px solid white;
+	float:right;
+	margin-right:10px;
+	background-image: url("/static/imgs/blankstamp.jpg");
+	background-repeat: no-repeat;
+	background-position: center; 
+	text-align:center;
+	color:black;
+	font-size:40px;
+	
+	}
+	
+.center{
+	vertical-align:middle;
+}
+
+.property{
+	font-weight:bold;
+}
