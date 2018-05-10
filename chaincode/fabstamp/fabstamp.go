@@ -50,6 +50,8 @@ type Stamp struct {
 	Date   string `json:"date"`
 	Timestamp int64 `json:"timestamp"`	
 	Instrument  string `json:"instrument"`
+    Instype string `json:"instype"`
+    Price int `json:"price"`
 	State  string `json:"state"`
 	Attachments []string `json:"attachments"`
 	Signatures []Signature `json:"signatures"`
@@ -108,9 +110,9 @@ func (s *SmartContract) queryStamp(APIstub shim.ChaincodeStubInterface, args []s
 
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	stamps := []Stamp{
-		Stamp{Date : "14-05-2015",Instrument:"instrument1",Attachments:[]string{"attachment1","attachment2"},State:"Rajasthan",Timestamp:makeTimestamp(),
+		Stamp{Date : "14-05-2015",Price:40,Instype:"iamtype",Instrument:"instrument1",Attachments:[]string{"attachment1","attachment2"},State:"Rajasthan",Timestamp:makeTimestamp(),
 			Signatures: []Signature{ Signature{Sign : "I am sign1",Type:0},Signature{Sign:"I am sign2",Type : 1} } },
-		Stamp{Date : "14-03-2018",Instrument:"instrument2",Attachments:[]string{"attachment3","attachment4"},State:"Punjab",Timestamp:makeTimestamp(),
+		Stamp{Date : "14-03-2018",Price:50,Instype:"iamtype",Instrument:"instrument2",Attachments:[]string{"attachment3","attachment4"},State:"Punjab",Timestamp:makeTimestamp(),
 			Signatures: []Signature{ Signature{Sign : "I am sign3",Type:0},Signature{Sign:"I am sign4",Type : 1} }}}
 
 	i := 0
@@ -131,22 +133,26 @@ func (s *SmartContract) createStamp(APIstub shim.ChaincodeStubInterface, args []
 	if len(args) < 5 {
 		return shim.Error("Incorrect number of arguments. Expecting At least 5")
 	}
-	lenattach, err := strconv.Atoi(args[3])
+    typeprice,err3 := strconv.Atoi(args[3])
+	if(err3!= nil){
+		return shim.Error("Incorrect price type in argument"+args[3])
+		}
+	lenattach, err := strconv.Atoi(args[5])
 	if(err!= nil){
-		return shim.Error("Incorrect array length")
+		return shim.Error("Incorrect array length"+args[5])
 		}
 	i:=0
 	 attachments := make([]string, lenattach);
 	for i<lenattach{
-		attachments[i] = args[i+4]
+		attachments[i] = args[i+6]
 		i = i+1
 		}
-		i  = i+3 
+		i  = i+5 
 	state :=args[i+1]
 	
 	signlength ,err1:= strconv.Atoi(args[i+2])
 	if(err1!= nil){
-		return shim.Error("Incorrect sign length")
+		return shim.Error("Incorrect sign length "+args[i+2]+args[5])
 		}
 	 signatures := make([]Signature, signlength);
 	i = i + 2
@@ -161,8 +167,7 @@ func (s *SmartContract) createStamp(APIstub shim.ChaincodeStubInterface, args []
 		j = j+1
 		}
 	
-	
-	var stamp = Stamp{Date : args[1],Instrument:args[2],Attachments:attachments,State:state,Signatures: signatures,Timestamp:makeTimestamp()}
+	var stamp = Stamp{Date : args[1],Instrument:args[2],Price:typeprice,Instype:args[4],Attachments:attachments,State:state,Signatures: signatures,Timestamp:makeTimestamp()}
 	fmt.Println("Added", stamp)
 	stampAsBytes, _ := json.Marshal(stamp)
 	APIstub.PutState(args[0], stampAsBytes)

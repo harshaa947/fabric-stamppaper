@@ -63,7 +63,7 @@ function connect_to_server() {
 				}
 
 				start_up = false;
-				$('#appCreate').html('<i class="fa fa-plus addStamp"></i>');
+				//$('#appCreate').html('');
 			}
 
 			
@@ -132,6 +132,13 @@ function connect_to_server() {
 					}
 				}
 			}
+            
+            else if (msgObj.msg === 'queryStamp') {
+				console.log(wsTxt + ' rec', msgObj.msg, msgObj);
+				var built = 0;
+				var x = 0;
+                build_stamp(msgObj.data.key,msgObj.data.parsed);
+            }
 
 			
 

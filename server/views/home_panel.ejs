@@ -1,15 +1,22 @@
 <div class="panel" id="homePanel">
     <div>
-        <div id="tips"><span>Add Your Tips</span></div>
+        <div id="tips"><span>Click on plus button to create new Stamp!! Search stamp Key</span></div>
+         <div id="appCreate">
+         <i class="fa fa-plus addStamp"></i><input type="file" name="stampfile" id="stampfile" /><i id="openStamp" class="fas fa-folder-open"></i></div>
+         <br>
+         <br>
         <div id="ownerWrap">
             <div id="toolbarWrap">
+                <div class="bottomAlign"><input class="longer" type="text" placeholder="Search Stamps" style="margin-left: 0; border-radius:2px;" id="searchStamps" />
+                    <span class="hint" style="margin-left: 10px; font-size: 16px;"> </span>
+                </div>
                 <button disabled="disabled" id="showStartupPanel"><span class="fa fa-gears"></span><span>&nbsp; Start Up Help</span></button><span>&nbsp;&nbsp;</span><button disabled="disabled" id="showSettingsPanel"><span class="fa fa-gear"></span><span>&nbsp; Settings</span></button>
                 
         </div>
     </div>
     <div id="stamps">
         <div id="appStartingText">Connecting...</div>
-        <div id="appCreate"></div>
+       
     </div>
 </div>
 </div>

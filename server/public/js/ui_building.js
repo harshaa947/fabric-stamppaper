@@ -1,19 +1,20 @@
 /* global bag, $, ws*/
 /* global escapeHtml, toTitleCase, formatDate, known_companies, transfer_marble, record_company, show_tx_step, refreshHomePanel, auditingMarble*/
 /* exported build_marble, record_company, build_user_panels, build_company_panel, build_notification, populate_users_marbles*/
-/* exported build_a_tx, marbles */
+/* exported build_a_tx,buildstamps */
 
-var stamps = {};
+buildstamps = {};
 
 // =================================================================================
 //	UI Building
 // =================================================================================
 //build a marble
 function build_stamp(key,stamp) {
-	stamps[key] = stamp;
+	buildstamps[key] = stamp;
 
 	
 	$("#stamps").prepend(html_stamp(key,stamp))
+    
 }
 
 function html_stamp(key,stamp){
@@ -23,20 +24,27 @@ function html_stamp(key,stamp){
 	console.log(stamp);
 	var html = `<link rel="stylesheet" href="/static/css/test.css">
 	<div class="stamp"><span class="stampid" id="`
-	html+= stamp.id +'">Stamp</span>'
-	html+=`<div class="stampduty"><span class="center">40</span></div>
-	<div class="instrument"><span class="property">Instrument : </span><span>`;
+	html+= stamp.id +'">Stamp:'+ stamp.id+'</span>'
+	html+=`<div class="stampduty"><span class="center">`+stamp.price+`</span></div>
+	<div class="instrument"><span class="property">Instrument : </span><button class="collapsible">Instrument</button>
+                        <div class="collapsecontent">
+                        <p>`;
 
 	
 	html+=stamp.instrument
-	html+=`</span></div>
+	html+=`</p></div></div>
 	<div class="state"><span class="property">State : </span>`
 	html+=stamp.state
-	html+=`</div><div class="attachments">
+	html+=`</div><div><span class="property">Instrument Type: </span>`
+       html+= stamp.instype     
+    
+    html+=`</div><div class="attachments">
 		<span class="property">Attachments : </span>
 		<ol>`
 	for(var i in stamp.attachments){
-		html+="<li>"+stamp.attachments[i]+"</li>"
+		html+=`<li><button class="collapsible">Attach</button>
+                        <div class="collapsecontent">
+                        <p>`+stamp.attachments[i]+"</p></div></li>"
 		}
 			
 	html+=	`</ol>
@@ -45,7 +53,9 @@ function html_stamp(key,stamp){
 		<span class="property">Signatures : </span>
 		<ol>`
 		for(var i in stamp.signatures){
-			html+="<li ><span class='bold'>"+stamp.signatures[i].typestr+" : </span>"+stamp.signatures[i].sign+"</li>"
+			html+=`<li><button class="collapsible">Sign</button>
+                        <div class="collapsecontent">
+                        <p><span class='bold'>`+stamp.signatures[i].typestr+" : </span>"+stamp.signatures[i].sign+"</p></div></li>"
 		}
 
 	html+=`	</ol>
@@ -139,7 +149,7 @@ function build_a_tx(data, pos,id) {
 				<div class ="attachments stampLegend">Attachments:</div>
 				<ol>`
 			for(var i in data.value.attachments){
-				html+="<li class='stampName'>"+data.value.attachments[i]+"</li>"
+				html+="<li class='stampName'>"+data.value.attachments[i].substring(0,14)+"</li>"
 				}
 			html+=`</ol><div class ="signatures stampLegend">Signatures:</div>
 					<ol>`

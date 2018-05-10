@@ -107,12 +107,52 @@ $(function(){
 		return false;
 	});
 
+
+    $('#searchStamps').keyup(function (e) {
+		if(e.keyCode != 13){
+                return;
+            }
+		var input = $(this).val();
+		
+
+		//reset - clear search
+		if (input === '') {
+			
+		}
+		else {
+			var parts = input.split(',');
+			console.log('searching on', parts);
+
+			//figure out if the user matches the search
+			for(var i in parts){
+                var part = parts[i];
+                console.log(buildstamps);
+                if(buildstamps[part]){
+                    continue;
+                    }
+                else{
+                    var obj = {
+			type: 'getStamp',
+			stamp_id:part			
+            };
+                    ws.send(JSON.stringify(obj));
+                    }
+                }
+
+			
+			
+		}
+		
+	});
+    
 	$('#signTransaction').click(function(){
+        var temp = JSON.parse(JSON.stringify(createdStamp));
+        temp.type = 0;
 		$.ajax({
             type: "GET",
             url: "/app/api/sign",
             contentType: 'application/json',
-            data: {"act":JSON.stringify(createdStamp)},
+            data: {"act":JSON.stringify(temp)},
             cache: false,
             timeout: 600000,
             success: function (data) {
@@ -137,21 +177,23 @@ $(function(){
 		$('#tint').fadeOut();
 		var signs = [];
 		var signLength = 0;
-		if(createdStamp.sign){
-			signLength = createdStamp.sign.length;
-			signs = createdStamp.sign;
+		if(createdStamp.signatures){
+			signLength = createdStamp.signatures.length;
+			signs = createdStamp.signatures;
 			}
 		var obj = {
 			type: 'create',
 			state: createdStamp.state,
 			timestamp: createdStamp.timestamp,
 			hash: createdStamp.instrument,
-			key: createdStamp.key,
+			//key: createdStamp.key,
 			v: 1,
 			attachLength:createdStamp.attachLength,
 			signLength:signLength,
-			attach : createdStamp.attach,
-			sign:signs			
+			attach : createdStamp.attachments,
+			sign:signs	,
+            price:createdStamp.price,
+            instype:createdStamp.instype		
 		};
 		show_tx_step({ state: 'building_proposal' }, function () {
 			ws.send(JSON.stringify(obj));
@@ -178,7 +220,56 @@ $(function(){
 		$('#createPanel').fadeIn();
 		$('#createstepsWrap, #createdetailsWrap').fadeIn();
 	});
-
+    
+    $('#stamps').on('click','.collapsible',function(){
+        
+       this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
+        } 
+        
+    });
+    
+    $('#cStampdetail').on('click','.collapsible',function(){
+        
+       this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
+        } 
+        
+    });
+    
+    $("#stampfile").change(function(){
+       var stampfile =  $('input[name="stampfile"]')[0].files[0]
+        readJson(stampfile,function(e,res){
+            if(e){
+                console.log(e);
+                }else{
+                  createdStamp = res;
+                  $("#cStampdetail").html(html_stamp("key_name",createdStamp));
+                  $("#createStepOne .cnextStep")[0].click();
+				  $("#createStepOne").addClass("success");    
+                }
+            });
+    });
+    
+    $('.collapsible').click(function(){
+        
+       this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
+        } 
+        
+    });
 	//close create marble panel
 	$('#tint').click(function () {
 		if ($('#startUpPanel').is(':visible')) return;
@@ -280,7 +371,7 @@ $(function(){
 
 			$('#rightEverything').addClass('rightEverythingOpened');
 			$('#leftEverything').fadeIn();
-
+            $('#marbleId').html(stamp_id);
 			var obj2 = {
 				type: 'audit',
 				stamp_id: stamp_id

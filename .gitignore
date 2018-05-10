@@ -4,7 +4,7 @@ basic-network/crypto-config/
 basic-network/config/
 server/hfc-key-store/
 server/node_modules/
-server/config/private.js/
+server/config/private.js
 server/keys/
 keys/
 node_modules/

@@ -101,6 +101,20 @@ function getBase64(file,cb) {
    };
 }
 
+function readJson(file,cb){
+    
+    var reader = new FileReader();
+   reader.readAsText(file);
+   reader.onload = function () {
+       console.log(reader.result);
+    cb(null,JSON.parse(reader.result));
+   };
+   reader.onerror = function (error) {
+     console.log('Error: ', error);
+     cb(1,error);
+   };
+    }
+
 function calculatesha256(file,cb){
 	getBase64(file,function(err,resp){
 		if(err){

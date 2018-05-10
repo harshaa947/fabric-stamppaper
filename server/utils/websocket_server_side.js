@@ -86,7 +86,8 @@ var cp_general = require(appRoot+'/config/general');
 		} else if (data.type === 'create') {
 			logger.info('[ws] create Stamp req');
 			
-			var options = [data.key, data.timestamp, data.hash, data.attachLength+'']
+            data.key = 'Stamp'+generateKey()
+			var options = [data.key, data.timestamp, data.hash, data.price,data.instype,data.attachLength+'']
 			for(var i=0;i<data.attachLength;i++){
 				options.push(data.attach[i]);
 				}
@@ -94,7 +95,7 @@ var cp_general = require(appRoot+'/config/general');
 			options.push(data.signLength+'');
 			for(var i=0;i<data.signLength;i++){
 				options.push(data.sign[i].sign);
-				options.push(data.sign[i].id+'');				
+				options.push(data.sign[i].type+'');				
 			}
 						request = {
 					//targets: let default to the peer assigned to the client
@@ -109,7 +110,30 @@ var cp_general = require(appRoot+'/config/general');
 				if (err != null) send_err(err, data);
 				else ws.send(JSON.stringify({ msg: 'tx_step', state: 'finished' }));
 			});
-		}
+		}else if (data.type === 'getStamp') {
+			logger.info('[ws] get Stamp req');
+            if (data.stamp_id) {
+				
+				var request = {
+						//targets : --- letting this default to the peers assigned to the channel
+						chaincodeId: cp_general.chaincodeId,
+						fcn: 'queryStamp',
+						args: [data.stamp_id]
+					};
+				console.log(request);	
+				fcw.query_transaction(request, function (err, resp) {
+					logger.debug(resp);
+					if (err != null) send_err(err, resp);
+					
+					else {
+						var out_data = {}
+						out_data.parsed = resp;
+						out_data.key = data.stamp_id;
+						options_ws.ws.send(JSON.stringify({ msg: 'queryStamp', data: out_data }));
+					}
+				});
+			}
+        }
 
 
 
@@ -278,7 +302,27 @@ var cp_general = require(appRoot+'/config/general');
 			if (entryA > entryB) return 1;
 			return 0;
 		});
-return temp;
+    return temp;
 	}
+    
+    function generateKey(){
+        var intKeys = [];
+        for(var i in known_everything.keys){
+            var key = known_everything.keys[i]
+            intKeys.push(parseInt(key.substring(5)));
+            }
+            intKeys.sort();
+        
+        for(var i=0;i<intKeys.length;i++){
+            if(intKeys[i]==i){
+                continue;
+                }
+            else{
+                return i;
+                }
+            }
+        return intKeys.length;
+        
+    }
 
 module.exports = ws_server;
