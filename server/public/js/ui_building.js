@@ -22,40 +22,42 @@ function html_stamp(key,stamp){
 	stamp =escape_stamp(key,stamp);
 	purifySignatures(stamp.signatures);
 	console.log(stamp);
-	var html = `<link rel="stylesheet" href="/static/css/test.css">
-	<div class="stamp"><span class="stampid" id="`
+	var html = `
+	<div class="stamp"><br><span class="stampid" id="`
 	html+= stamp.id +'">Stamp:'+ stamp.id+'</span>'
-	html+=`<div class="stampduty"><span class="center">`+stamp.price+`</span></div>
-	<div class="instrument"><span class="property">Instrument : </span><button class="collapsible">Instrument</button>
+	html+='<div class="stampduty"><span class="center">'+stamp.price+'</span></div>'
+	
+	html+= '<div class="state"><br><span class="property">State : </span>'
+	html+=stamp.state
+	html+=`</div><br><div><span class="property">Type: </span>`
+       html+= stamp.instype     
+    
+    html+=`</div><br>`
+    html+= `<div class="instrument"><span class="property"></span><button class="collapsible">Instrument</button>
                         <div class="collapsecontent">
                         <p>`;
 
 	
 	html+=stamp.instrument
-	html+=`</p></div></div>
-	<div class="state"><span class="property">State : </span>`
-	html+=stamp.state
-	html+=`</div><div><span class="property">Instrument Type: </span>`
-       html+= stamp.instype     
-    
-    html+=`</div><div class="attachments">
-		<span class="property">Attachments : </span>
+	html+=`</p></div></div><br>`
+    html+=`<div class="attachments">
+		<span class="property"></span>
 		<ol>`
 	for(var i in stamp.attachments){
 		html+=`<li><button class="collapsible">Attach</button>
                         <div class="collapsecontent">
-                        <p>`+stamp.attachments[i]+"</p></div></li>"
+                        <p>`+stamp.attachments[i]+"</p></div></li><br>"
 		}
 			
 	html+=	`</ol>
 	</div>
 	<div class="signatures">
-		<span class="property">Signatures : </span>
+		<span class="property"></span>
 		<ol>`
 		for(var i in stamp.signatures){
 			html+=`<li><button class="collapsible">Sign</button>
                         <div class="collapsecontent">
-                        <p><span class='bold'>`+stamp.signatures[i].typestr+" : </span>"+stamp.signatures[i].sign+"</p></div></li>"
+                        <p><span class='bold'>`+stamp.signatures[i].typestr+" : </span>"+stamp.signatures[i].sign+"</p></div></li><br>"
 		}
 
 	html+=`	</ol>
@@ -163,7 +165,7 @@ function build_a_tx(data, pos,id) {
 
 
 function build_attach_row(count){
-	var html = '<p id="attachRowE'+count+'">Attachment'+count+ ' : <input class="attachRow" type="file" name="attach"><br/></p>'
+	var html = '<p id="attachRowE'+count+'">Attachment'+count+ ' : <label for="attachRowIN'+count+'" ><i class="fas fa-folder-open"></i></label><input id="attachRowIN'+count+'"class="attachRow inputfile" type="file" name="attach"/><span></span><br/></p>'
 	return html;
 	}
 	

@@ -271,6 +271,7 @@ function createTransaction(request,ws,cb){
 			if(results && results[1] && results[1].event_status === 'VALID') {
 				ws.send(JSON.stringify({ msg: 'tx_step', state: 'committing' }));
 				cb(null,results);
+                ws.send(JSON.stringify({ msg: 'res_create', key:request.args[0] }));
 				logger.debug('Successfully committed the change to the ledger by the peer');
 			} else {
 				cb(2,results[1].event_status)

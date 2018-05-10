@@ -270,6 +270,20 @@ $(function(){
         } 
         
     });
+    
+     $('#createform').on('change','.inputfile',function(){
+        
+        var content = this.nextElementSibling;
+        content.innerHTML=this.value;
+        
+    });
+    
+    $('.inputfile').change(function(){
+         var content = this.nextElementSibling;
+        content.innerHTML=this.value;
+       
+    });
+    
 	//close create marble panel
 	$('#tint').click(function () {
 		if ($('#startUpPanel').is(':visible')) return;

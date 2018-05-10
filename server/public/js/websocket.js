@@ -139,7 +139,11 @@ function connect_to_server() {
 				var x = 0;
                 build_stamp(msgObj.data.key,msgObj.data.parsed);
             }
-
+            
+            
+            else if (msgObj.msg === 'res_create') {
+				addshow_notification(build_notification(false, 'New Stamp Created '+msgObj.key), true);
+            }
 			
 
 			//unknown

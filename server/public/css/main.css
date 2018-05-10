@@ -10,7 +10,9 @@
     margin-left:10px;
     margin-right:10px;
     vertical-align:top;
-    background:#39424d
+    background:#39424d;
+    font-size: 15px;
+    width:500px;
 	}
 .stampduty{
 	margin-top:5px;
@@ -51,10 +53,10 @@
     font-family:monospace;
     padding:3px 10px
 }
-.attachments ol , .signatures ol{
+/*.attachments ol , .signatures ol{
 	padding:10px 0px 10px 40px;
 	list-style:circle;
-}
+}*/
 
 .bold{
 	font-weight:bold;
@@ -143,4 +145,68 @@ word-wrap: break-word;
     overflow-wrap: break-word;
     word-wrap: break-word;
     max-width:500px;
+}
+.fa-remove:before, .fa-close:before, .fa-times:before {
+    content: "\f00d";
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#cStampdetail .stamp{
+    width:500px;
+    background:inherit;
+
+}
+
+#cStampdetail .stampduty{
+    padding-top:20px;
+}
+#createform{
+color:#FFF
+}
+/*
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+*/
+
+
+#createform label, input {
+    /* in order to define widths */
+    display: inline-block;
+}
+
+#createform label {
+    width: 30%;
+    /* positions the label text beside the input */
+    text-align: right;
+}
+
+#createform label + input {
+    width: 30%;
+    /* large margin-right to force the next element to the new-line
+       and margin-left to create a gutter between the label and input */
+    margin: 0 30% 0 4%;
+}
+
+/* only the submit button is matched by this selector,
+   but to be sure you could use an id or class for that button */
+#createform input + input {
+    float: right;
 }
