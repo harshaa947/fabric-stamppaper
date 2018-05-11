@@ -142,6 +142,7 @@ function connect_to_server() {
             
             
             else if (msgObj.msg === 'res_create') {
+                $("#createStepThree").addClass("success");
 				addshow_notification(build_notification(false, 'New Stamp Created '+msgObj.key), true);
             }
 			
@@ -219,9 +220,9 @@ function slowBuildtx(data, txNumber, built) {
 }
 function refreshHomePanel() {
 	clearTimeout(pendingTransaction);
-	pendingTransaction = setTimeout(function () {								//need to wait a bit
+	/*pendingTransaction = setTimeout(function () {								//need to wait a bit
 		get_everything_or_else();
-	}, block_ui_delay);
+	}, block_ui_delay);*/
 }
 
 //get everything with timeout to get it all again!

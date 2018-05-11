@@ -23,13 +23,13 @@ function html_stamp(key,stamp){
 	purifySignatures(stamp.signatures);
 	console.log(stamp);
 	var html = `
-	<div class="stamp"><br><span class="stampid" id="`
-	html+= stamp.id +'">Stamp:'+ stamp.id+'</span>'
+	<div class="stamp"><br><span class="stampid property" id="`
+	html+= stamp.id +'">Stamp : </span><span>'+ stamp.id+'</span>'
 	html+='<div class="stampduty"><span class="center">'+stamp.price+'</span></div>'
 	
 	html+= '<div class="state"><br><span class="property">State : </span>'
 	html+=stamp.state
-	html+=`</div><br><div><span class="property">Type: </span>`
+	html+=`</div><br><div><span class="property">Type : </span>`
        html+= stamp.instype     
     
     html+=`</div><br>`
@@ -166,6 +166,11 @@ function build_a_tx(data, pos,id) {
 
 function build_attach_row(count){
 	var html = '<p id="attachRowE'+count+'">Attachment'+count+ ' : <label for="attachRowIN'+count+'" ><i class="fas fa-folder-open"></i></label><input id="attachRowIN'+count+'"class="attachRow inputfile" type="file" name="attach"/><span></span><br/></p>'
+	return html;
+	}
+    
+function build_vattach_row(count){
+	var html = '<p id="vattachRowE'+count+'">Attachment'+count+ ' : <label for="vattachRowIN'+count+'" ><i class="fas fa-folder-open"></i></label><input id="vattachRowIN'+count+'"class="attachRow inputfile" type="file" name="vattach"/><span></span><br/></p>'
 	return html;
 	}
 	

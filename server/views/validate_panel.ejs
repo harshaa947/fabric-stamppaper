@@ -1,0 +1,72 @@
+ <div class="panel" id="validatePanel" hidden="hidden"><span class="fa fa-close" id="closeValidate"></span>
+<div id="validatestepsWrap">
+		<div class="voneStepWrap successfulStepIcon vonStep" stepid="validateStepOne">
+			<div class="stepIcon bounce">1</div>
+		</div>
+		<div class="voneStepWrap" stepid="validateStepTwo">
+			<div class="stepDivide"></div>
+			<div class="stepIcon">2</div>
+		</div>
+		
+		<div id="stepsTitle">There are 2 steps to complete. Click a step to jump to it.</div>
+	</div>
+	<div id="validatedetailsWrap">
+		<div class="stepWrap"  id="validateStepOne">
+		   <div class="stepHeader"><span class="fa fa-user"></span><span>&nbsp;&nbsp;Validate Stamp</span></div>
+		   <div class="stepDescription"><span>Fill out form to Attach stamp instruments.</span><br/></div>
+		   <div
+			  class="loadingdiv">
+			  <span></span><span></span><span></span><span></span><span></span>
+			  <div></div>
+		   </div>			
+			<div class="createinnerWrap vstartupWrap">
+				<form action="/create" method="POST" id="validateform">
+                    <legend>
+                    <label for="vhash" >Hash   <i class="fas fa-folder-open"></i></label>
+						<input name="vhash" type="file" id="vhash" value="" class="inputfile"><span></span></legend>
+                    </legend>
+						
+					<!--<legend>
+						<label for="key" >Key : </label>
+						<input name="key" type="text" value="Stamp45" id="key"></legend>-->
+					<legend id="vattachLegend">
+                        <span> Attachments  </span> &nbsp;&nbsp;
+                        <i class="fa fa-plus " id="vaddAttachRow"></i>&nbsp;&nbsp;
+                        <i class="fa fa-minus " id="vdeleteAttachRow"></i>
+                        <br>
+					</legend>
+					<!--
+					<legend id="signLegend">
+					<span> Signatures :</span> 
+					<i class="fa fa-plus" id="addSignRow"></i>
+					<br>
+					</legend>-->
+                    <div style="text-align:center; width:100%">
+                        <button type="button" id="validateStampButton"><span class="fa fa-check">&nbsp;&nbsp;</span><span>Validate</span></button>
+                    </div>
+					
+				</form>
+			</div>
+			 <div class="successStep">Step 1 Complete</div>
+		   <br/><br/><button class="vnextStep" nextstepid="validateStepTwo" hidden>Next Step</button>
+		</div>
+        
+		<div class="stepWrap hidden"  id="validateStepTwo">
+			<div class="stepHeader"><span class="fa fa-user"></span><span>&nbsp;&nbsp;Verification</span></div>
+		   <div class="stepDescription"><span>Validation Results.</span><br/></div>
+		   <div
+			  class="loadingdiv">
+			  <span></span><span></span><span></span><span></span><span></span>
+			  <div></div>
+		   </div>
+			<div class="vstartupwrap" id="vStampdetail">
+			
+			</div>
+			
+			<div class="successStep">Step 2 Complete</div>
+		 
+		</div>
+		
+    </div>
+</div>
+

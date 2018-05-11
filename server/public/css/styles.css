@@ -521,7 +521,7 @@ strong{
     height:250px;
     vertical-align:middle
 }
-#createform{
+#createform,#validateform{
     display:inline-block;
     margin-top:40px;
     margin-left:15px;
@@ -536,7 +536,7 @@ strong{
     text-align:center;
     margin-top:20px
 }
-#createPanel{
+#createPanel,#validatePanel{
     position:fixed;
     top:75px;
     background:#343d48;
@@ -892,12 +892,12 @@ strong{
     margin-top:15px;
     padding-top:15px
 }
-#closeCreate,#closePos,#closeSettings,#closeStartUp,#closeTxStoryPos,#closeCreate{
+#closeCreate,#closePos,#closeSettings,#closeStartUp,#closeTxStoryPos,#closeValidate{
     position:absolute;
     right:15px;
     top:15px
 }
-#closeCreate:hover,#closePos:hover,#closeSettings:hover,#closeStartUp:hover,#closeTxStoryPos:hover,#closeCreate:hover{
+#closeCreate:hover,#closePos:hover,#closeSettings:hover,#closeStartUp:hover,#closeTxStoryPos:hover,#closeValidate:hover{
     color:#ff5b5b;
     cursor:pointer
 }

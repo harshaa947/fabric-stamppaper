@@ -62,31 +62,31 @@
 	font-weight:bold;
 }
 
-#createstepsWrap{
+#createstepsWrap,#validatestepsWrap{
     display:block;
     text-align:center;
     margin-top:-10px;
     margin-bottom:25px;
     display:none
 }
-#createdetailsWrap{
+#createdetailsWrap,#validatedetailsWrap{
     display:block;
     width:100%;
     text-align:center;
     display:none
 }
 
-.coneStepWrap{
+.coneStepWrap , .voneStepWrap{
     display:inline-block;
     margin:0;
     text-align:center
 }
-.coneStepWrap:hover{
+.coneStepWrap:hover , .voneStepWrap:hover{
     cursor:pointer;
     color:#2eb9d6
 }
 
-.cstartupWrap{
+.cstartupWrap , .vstartupWrap{
     color:#5b6169;
     border:1px #5b6169 solid;
     border-radius:3px;
@@ -129,7 +129,7 @@ word-wrap: break-word;
   overflow-y:scroll;
 }
 
-#createPanel {
+#createPanel , #validatePanel {
     display:none;
     position:fixed;
     top:0px;
@@ -168,7 +168,7 @@ word-wrap: break-word;
 #cStampdetail .stampduty{
     padding-top:20px;
 }
-#createform{
+#createform,#validateform{
 color:#FFF
 }
 /*
@@ -209,4 +209,31 @@ color:#FFF
    but to be sure you could use an id or class for that button */
 #createform input + input {
     float: right;
+}
+
+
+/*#validateform label, input {
+    
+    display: inline-block;
+}
+
+#validateform label {
+    width: 30%;
+   
+    text-align: right;
+}
+
+#validateform label + input {
+    width: 30%;
+
+    margin: 0 30% 0 4%;
+}
+
+
+#validateform input + input {
+    float: right;
+}
+*/
+#vStampdetail {
+color:white;
 }

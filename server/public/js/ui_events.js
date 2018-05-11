@@ -12,8 +12,20 @@ var fromLS = {};
 var block_ui_delay = 15000; 								//default, gets set in ws block msg
 var auditingStamp = null;
 var rowAttachCount = 0;
+var vrowAttachCount = 0;
 var rowSignCount = 0;
 var createdStamp =  null;
+var validatingStamp = null;
+/* Stamp structure
+ *  timestamp
+ *  price
+ *  state
+ *  instrument
+ *  attachments
+ * signatures
+ * instype
+ * date
+ */
 // =================================================================================
 // On Load
 // =================================================================================
@@ -184,7 +196,7 @@ $(function(){
 		var obj = {
 			type: 'create',
 			state: createdStamp.state,
-			timestamp: createdStamp.timestamp,
+			timestamp: createdStamp.date,
 			hash: createdStamp.instrument,
 			//key: createdStamp.key,
 			v: 1,
@@ -278,6 +290,12 @@ $(function(){
         
     });
     
+    $('#validateform').on('change','.inputfile',function(){
+        
+        var content = this.nextElementSibling;
+        content.innerHTML=this.value;
+        
+    });
     $('.inputfile').change(function(){
          var content = this.nextElementSibling;
         content.innerHTML=this.value;
@@ -368,12 +386,12 @@ $(function(){
 	function auditStamp(that, open) {
 		var stamp_id = $(that).attr('id');
 		$('.auditingStamp').removeClass('auditingStamp');
-		if (!auditingStamp || stamps[stamp_id].id != auditingStamp.id) {//different marble than before!
+		if (!auditingStamp || buildstamps[stamp_id].id != auditingStamp.id) {//different marble than before!
 			for (var x in pendingTxDrawing) clearTimeout(pendingTxDrawing[x]);
 			$('.txHistoryWrap').html('');										//clear
 		}
 
-		auditingStamp = stamps[stamp_id];
+		auditingStamp = buildstamps[stamp_id];
 		console.log('\nuser clicked on stamp', stamp_id);
 
 		if (open || $('#auditContentWrap').is(':visible')) {
@@ -403,7 +421,7 @@ $(function(){
 			$('.txHistoryWrap').html('<div class="auditHint">Click a Stamp to Audit Its Transactions</div>');//clear
 		}, 750);
 		$('#marbleId').html('-');
-		auditingMarble = null;
+		
 
 		setTimeout(function () {
 			$('#rightEverything').removeClass('rightEverythingOpened');
@@ -417,7 +435,89 @@ $(function(){
 		$('#leftEverything').fadeIn();
 	});
 
+    $('#validateTransaction').click(function(){
+        validatingStamp = createdStamp;
+        $('#createPanel, #tint').fadeOut();
+        $('#tint').fadeIn();
+		$('#validatePanel').fadeIn();
+		$('#validatestepsWrap, #validatedetailsWrap').fadeIn();
+        });
+        
+    $('#validateAudit').click(function(){
+        validatingStamp = auditingStamp;
+        $('#createPanel, #tint').fadeOut();
+        $('#tint').fadeIn();
+		$('#validatePanel').fadeIn();
+		$('#validatestepsWrap, #validatedetailsWrap').fadeIn();
+        });
 	
+        
+    
+	//Add row in attachments
+	$('#vaddAttachRow').click(function () {
+		var html = build_vattach_row(vrowAttachCount)
+		vrowAttachCount+=1;
+		$("#vattachLegend").append(html);
+	});
+	$('#vdeleteAttachRow').click(function () {
+		
+		vrowAttachCount-=1;
+		$("#vattachRowE"+vrowAttachCount).remove();
+	});
+    
+    
+    $('#validateStampButton').click(function (event) {
+        event.preventDefault();
+        var form = $('#validateform')[0];
+        var data = new FormData(form);
+        var attachs = validatingStamp.attachments
+        var signs = validatingStamp.signatures
+        if(!attachs){
+            attachs = []
+            }
+        if(!signs){
+            signs = []
+            }
+        data.append("state",validatingStamp.state);
+        data.append("price", validatingStamp.price);
+        data.append("instype", validatingStamp.instype);
+        data.append("instrument", validatingStamp.instrument);
+        data.append("date", validatingStamp.date);
+        data.append("attachments", JSON.stringify(attachs));
+        data.append("signatures", JSON.stringify(signs));
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/app/api/verify",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+				console.log('creating stamp, sending');
+							
+				$("#vStampdetail").html(data.message);
+                $("#validateStepOne").addClass("success");
+				$("#validateStepOne .vnextStep")[0].click();
+                if(data.status == 0)
+                    $("#validateStepTwo").addClass("success");
+                else
+                    $("#validateStepTwo").addClass("failure");
+            },
+            error: function (e) {
+
+              console.log(e);
+
+            }
+        });
+
+    
+
+		return false;
+	});
+
+
 });
 
 //toggle story mode

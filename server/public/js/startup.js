@@ -67,7 +67,7 @@ $(function () {
 
 	// ----------------------------- Nav -------------------------------------
 	$('.closeStartUp').click(function () {
-		get_everything_or_else();
+		//get_everything_or_else();
 		closeStartUp();
 	});
 
